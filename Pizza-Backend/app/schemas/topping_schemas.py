@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional
 
 class ToppingBase(BaseModel):
@@ -8,10 +8,9 @@ class ToppingCreate(ToppingBase):
     pass
 
 class ToppingUpdate(ToppingBase):
-    name: Optional[str]
+    name: Optional[str] = None
 
 class Topping(ToppingBase):
     id: int
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)

@@ -1,16 +1,17 @@
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
-from app import models, schemas
+from app.models import pizza_models
+from app.schemas import topping_schemas
 
 def get_toppings(db: Session):
-    return db.query(models.pizza.Topping).all()
+    return db.query(pizza_models.Topping).all()
 
 def get_topping_by_id(db: Session, topping_id: int):
-    return db.query(models.pizza.Topping).get(topping_id)
+    return db.get(pizza_models.Topping, topping_id)
 
-def create_topping(db: Session, topping: schemas.topping.ToppingCreate):
+def create_topping(db: Session, topping: topping_schemas.ToppingCreate):
     try:
-        new_topping = models.pizza.Topping(name=topping.name)
+        new_topping = pizza_models.Topping(name=topping.name)
         db.add(new_topping)
         db.commit()
         db.refresh(new_topping)
@@ -19,8 +20,8 @@ def create_topping(db: Session, topping: schemas.topping.ToppingCreate):
         db.rollback()
         return None
 
-def update_topping(db: Session, topping_id: int, topping_update: schemas.topping.ToppingUpdate):
-    new_topping = db.query(models.pizza.Topping).get(topping_id)
+def update_topping(db: Session, topping_id: int, topping_update: topping_schemas.ToppingUpdate):
+    new_topping = db.get(pizza_models.Topping, topping_id)
 
     if not new_topping:
         return None
@@ -34,7 +35,7 @@ def update_topping(db: Session, topping_id: int, topping_update: schemas.topping
     return new_topping
 
 def delete_topping(db: Session, topping_id: int):
-    cur_topping = db.query(models.pizza.Topping).get(topping_id)
+    cur_topping = db.get(pizza_models.Topping, topping_id)
     
     if cur_topping:
         db.delete(cur_topping)
