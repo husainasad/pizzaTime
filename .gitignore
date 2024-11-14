@@ -1,0 +1,6 @@
+**/*.pizza_venv
+**/*.env
+**/__pycache__/*
+**/*.ini
+**/*.pem
+**/*.ppk
